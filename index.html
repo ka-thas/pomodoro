@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Pomodoro</title>
+        <link rel="stylesheet" type="text/css" href="styles.css" />
+        <link rel="icon" href="../seedling.svg" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="UTF-8" />
+        <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+    </head>
+    <body>
+        <main>
+            <h1 class="gradient-text">Pomodoro</h1>
+            <div id="mode-buttons">
+                <button class="mode-btn active" data-mode="work" data-duration="25">Work</button>
+                <button class="mode-btn" data-mode="short" data-duration="5">Short Break</button>
+                <button class="mode-btn" data-mode="long" data-duration="15">Long Break</button>
+            </div>
+            <div id="timer-container">
+                <svg id="progress-ring" viewBox="0 0 220 220">
+                    <circle class="ring-bg" cx="110" cy="110" r="95" />
+                    <circle id="ring-fg" cx="110" cy="110" r="95" />
+                </svg>
+                <div id="timer-display">
+                    <span id="time">25:00</span>
+                </div>
+            </div>
+            <div id="controls">
+                <button id="reset" class="menu-button"><i data-lucide="rotate-ccw"></i></button>
+                <button id="start-pause" class="menu-button large"><i data-lucide="play"></i></button>
+                <button id="skip" class="menu-button"><i data-lucide="skip-forward"></i></button>
+            </div>
+            <div id="sessions">
+                <div id="session-dots"></div>
+                <span id="session-label">Session 1 of 4</span>
+            </div>
+        </main>
+        <script src="script.js"></script>
+        <script>lucide.createIcons();</script>
+    </body>
+</html>
