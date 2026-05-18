@@ -5,6 +5,15 @@
     --secondary: #9dd0b3;
     --accent: #76c498;
     --gray: #ded;
+    transition: background-color 0.4s ease;
+}
+
+body.work-active {
+    --background: #fdf3f3;
+    --primary: #e74c3c;
+    --secondary: #e8837a;
+    --accent: #c0392b;
+    --gray: #ecc;
 }
 
 * {
@@ -166,6 +175,18 @@ h1 {
 
 .menu-button.running {
     background-color: var(--primary);
+}
+
+.menu-button.active {
+    background-color: var(--primary);
+}
+
+#autoplay-toggle {
+    opacity: 0.5;
+}
+
+#autoplay-toggle.active {
+    opacity: 1;
 }
 
 /* Sessions */
