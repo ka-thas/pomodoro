@@ -30,12 +30,53 @@
                 <button id="start-pause" class="menu-button large"><i data-lucide="play"></i></button>
                 <button id="skip" class="menu-button"><i data-lucide="skip-forward"></i></button>
             </div>
-            <button id="autoplay-toggle" class="menu-button" title="Autoplay"><i data-lucide="repeat"></i></button>
             <div id="sessions">
                 <div id="session-dots"></div>
                 <span id="session-label">Session 1 of 4</span>
             </div>
+            <button id="settings-btn" class="menu-button"><i data-lucide="settings"></i></button>
         </main>
+
+        <div id="settings-overlay"></div>
+        <div id="settings-panel">
+            <div id="settings-header">
+                <span>Settings</span>
+                <button id="settings-close" class="menu-button small"><i data-lucide="x"></i></button>
+            </div>
+            <div class="settings-row">
+                <label>Autoplay</label>
+                <button class="toggle" id="autoplay-toggle"></button>
+            </div>
+            <div class="settings-row">
+                <label>Sound</label>
+                <button class="toggle on" id="sound-toggle"></button>
+            </div>
+            <div class="settings-divider"></div>
+            <div class="settings-row">
+                <label>Work</label>
+                <div class="duration-control">
+                    <button class="dur-btn" data-mode="work" data-delta="-1">−</button>
+                    <span id="work-dur">25</span> min
+                    <button class="dur-btn" data-mode="work" data-delta="1">+</button>
+                </div>
+            </div>
+            <div class="settings-row">
+                <label>Short Break</label>
+                <div class="duration-control">
+                    <button class="dur-btn" data-mode="short" data-delta="-1">−</button>
+                    <span id="short-dur">5</span> min
+                    <button class="dur-btn" data-mode="short" data-delta="1">+</button>
+                </div>
+            </div>
+            <div class="settings-row">
+                <label>Long Break</label>
+                <div class="duration-control">
+                    <button class="dur-btn" data-mode="long" data-delta="-1">−</button>
+                    <span id="long-dur">15</span> min
+                    <button class="dur-btn" data-mode="long" data-delta="1">+</button>
+                </div>
+            </div>
+        </div>
         <script src="script.js"></script>
         <script>lucide.createIcons();</script>
     </body>

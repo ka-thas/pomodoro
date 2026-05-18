@@ -1,4 +1,4 @@
-const CIRCUMFERENCE = 2 * Math.PI * 95; // 596.9
+const CIRCUMFERENCE = 2 * Math.PI * 95;
 
 const MODES = {
     work:  { label: "Work",        duration: 25 * 60 },
@@ -15,16 +15,25 @@ let running = false;
 let interval = null;
 let sessionsCompleted = 0;
 let autoplay = false;
+let soundEnabled = true;
 
-const timeEl           = document.getElementById("time");
-const ringFg           = document.getElementById("ring-fg");
-const startPause       = document.getElementById("start-pause");
-const resetBtn         = document.getElementById("reset");
-const skipBtn          = document.getElementById("skip");
-const sessionDots      = document.getElementById("session-dots");
-const sessionLabel     = document.getElementById("session-label");
-const modeBtns         = document.querySelectorAll(".mode-btn");
-const autoplayToggle   = document.getElementById("autoplay-toggle");
+const timeEl          = document.getElementById("time");
+const ringFg          = document.getElementById("ring-fg");
+const startPause      = document.getElementById("start-pause");
+const resetBtn        = document.getElementById("reset");
+const skipBtn         = document.getElementById("skip");
+const sessionDots     = document.getElementById("session-dots");
+const sessionLabel    = document.getElementById("session-label");
+const modeBtns        = document.querySelectorAll(".mode-btn");
+const settingsBtn     = document.getElementById("settings-btn");
+const settingsPanel   = document.getElementById("settings-panel");
+const settingsOverlay = document.getElementById("settings-overlay");
+const settingsClose   = document.getElementById("settings-close");
+const autoplayToggle  = document.getElementById("autoplay-toggle");
+const soundToggle     = document.getElementById("sound-toggle");
+const workDurEl       = document.getElementById("work-dur");
+const shortDurEl      = document.getElementById("short-dur");
+const longDurEl       = document.getElementById("long-dur");
 
 function formatTime(seconds) {
     const m = Math.floor(seconds / 60).toString().padStart(2, "0");
@@ -33,6 +42,7 @@ function formatTime(seconds) {
 }
 
 function playChime() {
+    if (!soundEnabled) return;
     const ctx = new (window.AudioContext || window.webkitAudioContext)();
     [[880, 0], [660, 0.15], [880, 0.3]].forEach(([freq, when]) => {
         const osc = ctx.createOscillator();
@@ -69,11 +79,8 @@ function buildSessionDots() {
         const dot = document.createElement("div");
         dot.className = "session-dot";
         const sessionNum = sessionsCompleted % SESSIONS_PER_CYCLE;
-        if (i < sessionNum) {
-            dot.classList.add("done");
-        } else if (i === sessionNum && currentMode === "work") {
-            dot.classList.add("current");
-        }
+        if (i < sessionNum) dot.classList.add("done");
+        else if (i === sessionNum && currentMode === "work") dot.classList.add("current");
         sessionDots.appendChild(dot);
     }
     const sessionNum = (sessionsCompleted % SESSIONS_PER_CYCLE) + 1;
@@ -85,11 +92,7 @@ function setMode(mode) {
     currentMode = mode;
     timeLeft = MODES[mode].duration;
     totalTime = MODES[mode].duration;
-
-    modeBtns.forEach(btn => {
-        btn.classList.toggle("active", btn.dataset.mode === mode);
-    });
-
+    modeBtns.forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
     updateDisplay();
     buildSessionDots();
     updateTheme();
@@ -105,9 +108,7 @@ function start() {
     interval = setInterval(() => {
         timeLeft--;
         updateDisplay();
-        if (timeLeft <= 0) {
-            onTimerEnd();
-        }
+        if (timeLeft <= 0) onTimerEnd();
     }, 1000);
 }
 
@@ -140,31 +141,53 @@ function onTimerEnd() {
     }
     buildSessionDots();
 
-    if (autoplay) {
-        setTimeout(start, 800);
-    }
+    if (autoplay) setTimeout(start, 800);
 }
 
-startPause.addEventListener("click", () => {
-    running ? pause() : start();
-});
+function openSettings() {
+    settingsPanel.classList.add("open");
+    settingsOverlay.classList.add("open");
+}
 
-resetBtn.addEventListener("click", () => {
-    stop();
-    buildSessionDots();
-});
+function closeSettings() {
+    settingsPanel.classList.remove("open");
+    settingsOverlay.classList.remove("open");
+}
 
-skipBtn.addEventListener("click", () => {
-    onTimerEnd();
-});
+// Controls
+startPause.addEventListener("click", () => running ? pause() : start());
+resetBtn.addEventListener("click", () => { stop(); buildSessionDots(); });
+skipBtn.addEventListener("click", () => onTimerEnd());
+modeBtns.forEach(btn => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
 
-modeBtns.forEach(btn => {
-    btn.addEventListener("click", () => setMode(btn.dataset.mode));
-});
+// Settings panel
+settingsBtn.addEventListener("click", openSettings);
+settingsClose.addEventListener("click", closeSettings);
+settingsOverlay.addEventListener("click", closeSettings);
 
+// Toggles
 autoplayToggle.addEventListener("click", () => {
     autoplay = !autoplay;
-    autoplayToggle.classList.toggle("active", autoplay);
+    autoplayToggle.classList.toggle("on", autoplay);
+});
+
+soundToggle.addEventListener("click", () => {
+    soundEnabled = !soundEnabled;
+    soundToggle.classList.toggle("on", soundEnabled);
+});
+
+// Duration buttons
+const durDisplays = { work: workDurEl, short: shortDurEl, long: longDurEl };
+
+document.querySelectorAll(".dur-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        const mode = btn.dataset.mode;
+        const delta = parseInt(btn.dataset.delta);
+        const mins = Math.max(1, Math.min(99, MODES[mode].duration / 60 + delta));
+        MODES[mode].duration = mins * 60;
+        durDisplays[mode].textContent = mins;
+        if (currentMode === mode) stop();
+    });
 });
 
 // Init

@@ -181,12 +181,141 @@ h1 {
     background-color: var(--primary);
 }
 
-#autoplay-toggle {
-    opacity: 0.5;
+.menu-button.small svg {
+    width: 16px;
+    height: 16px;
 }
 
-#autoplay-toggle.active {
-    opacity: 1;
+/* Settings overlay */
+#settings-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 10;
+}
+
+#settings-overlay.open {
+    display: block;
+}
+
+/* Settings panel */
+#settings-panel {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    width: 100%;
+    max-width: 420px;
+    background: var(--background);
+    border-radius: 20px 20px 0 0;
+    padding: 20px 24px 40px;
+    z-index: 11;
+    transition: transform 0.3s cubic-bezier(0.32, 0.72, 0, 1), background-color 0.4s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+#settings-panel.open {
+    transform: translateX(-50%) translateY(0);
+}
+
+#settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+    font-family: urbanist, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.settings-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    border-bottom: 1px solid var(--gray);
+}
+
+.settings-row:last-child {
+    border-bottom: none;
+}
+
+.settings-divider {
+    height: 1px;
+    background: var(--gray);
+    margin: 4px 0;
+}
+
+/* Toggle switch */
+.toggle {
+    width: 48px;
+    height: 26px;
+    border-radius: 13px;
+    background: var(--gray);
+    border: none;
+    cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    transition: background 0.2s ease;
+}
+
+.toggle::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: white;
+    top: 3px;
+    left: 3px;
+    transition: left 0.2s ease;
+}
+
+.toggle.on {
+    background: var(--primary);
+}
+
+.toggle.on::after {
+    left: 25px;
+}
+
+/* Duration controls */
+.duration-control {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+}
+
+.duration-control span {
+    min-width: 24px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.dur-btn {
+    width: 30px;
+    height: 30px;
+    border: none;
+    border-radius: 50%;
+    background: var(--gray);
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.1s ease;
+}
+
+.dur-btn:hover {
+    background: var(--secondary);
 }
 
 /* Sessions */
